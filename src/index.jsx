@@ -4,6 +4,7 @@ import { createElement } from 'elliptical'
 import { setClipboard, showNotification } from 'lacona-api'
 import { Command, String, DateTime, Duration } from 'lacona-phrases'
 import { onActivate } from 'lacona-source-helpers'
+import isRunning from 'is-running'
 import moment from 'moment'
 
 import { fromPromise } from 'rxjs/observable/fromPromise'
@@ -20,6 +21,14 @@ function getPIDPath () {
 function appendFile (file, line) {
   return new Promise((resolve, reject) => {
     fs.appendFile(file, `${line}\n`, err => {
+      err ? reject(err) : resolve()
+    })
+  })
+}
+
+function setFile (file, content) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(file, `${content}\n`, err => {
       err ? reject(err) : resolve()
     })
   })
@@ -159,8 +168,21 @@ export const CreateTimerCommand = {
 async function getCurrentTimerData () {
   const pidPath = getPIDPath()
   const lines = await readJSONLines(pidPath)
-  const timers = _.filter(lines, line => line.type === 'timer')
-  const alarms = _.filter(lines, line => line.type === 'alarm')
+
+  // for each line, check to see if the timer process still exists
+
+  const trueLines = _.filter(lines, line => isRunning(line.pid))
+
+  if (trueLines.length !== lines.length) {
+    const content = _.chain(trueLines)
+      .map(_.unary(JSON.stringify))
+      .join('\n')
+      .value()
+    await setFile(pidPath, content)
+  }
+
+  const timers = _.filter(trueLines, line => line.type === 'timer')
+  const alarms = _.filter(trueLines, line => line.type === 'alarm')
 
   const timerStrings = _.chain(timers)
     .map(line => {

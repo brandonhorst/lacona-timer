@@ -25,6 +25,7 @@
   "dependencies": {
     "elliptical": "^2.0.0",
     "elliptical-datetime": "^1.0.1",
+    "is-running": "^2.1.0",
     "lacona-api": "^1.4.0",
     "lacona-phrases": "^1.0.1",
     "lacona-source-helpers": "^1.4.0",
