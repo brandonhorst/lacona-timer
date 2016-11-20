@@ -6,7 +6,13 @@
   "lacona": {
     "title": "Timers & Alarms",
     "description": "Create and manage basic Timers and Alarms",
-    "config": "config.json"
+    "examples": [
+      "set timer for [3 minutes](duration)",
+      "set alarm for [8am](date and time)",
+      "set timer called [Break Time](timer title) for [25 minutes](duration)",
+      "set timer called [Pick up the kids](alarm title) at [3:30pm](date and time)"
+    ],
+    "engine": ">=1.1.0"
   },
   "scripts": {
     "build": "babel src --out-dir lib",

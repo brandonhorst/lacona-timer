@@ -167,7 +167,12 @@ export const CreateTimerCommand = {
 
 async function getCurrentTimerData () {
   const pidPath = getPIDPath()
-  const lines = await readJSONLines(pidPath)
+  let lines = []
+  try {
+    lines = await readJSONLines(pidPath)
+  } catch (e) {
+    console.error(`lacona-timer could not read file ${pidPath}`, e)
+  }
 
   // for each line, check to see if the timer process still exists
 
@@ -178,7 +183,11 @@ async function getCurrentTimerData () {
       .map(_.unary(JSON.stringify))
       .join('\n')
       .value()
-    await setFile(pidPath, content)
+    try {
+      await setFile(pidPath, content)
+    } catch (e) {
+      console.error(`lacona-timer could not write ${content} to file ${pidPath}`, e)
+    }
   }
 
   const timers = _.filter(trueLines, line => line.type === 'timer')
@@ -201,6 +210,10 @@ async function getCurrentTimerData () {
   let content = ''
   if (timerStrings) content += `<h3>Timers</h3><ul>${timerStrings}</ul>`
   if (alarmStrings) content += `<h3>Alarms</h3><ul>${alarmStrings}</ul>`
+
+  if (content === '') {
+    content = 'No Timers or Alarms'
+  }
 
   return content
 }
