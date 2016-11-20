@@ -12,6 +12,7 @@
       "set timer called [Break Time](timer title) for [25 minutes](duration)",
       "set timer called [Pick up the kids](alarm title) at [3:30pm](date and time)"
     ],
+    "iconURL": "https://raw.githubusercontent.com/brandonhorst/lacona-timer/master/icon.png",
     "engine": ">=1.1.0"
   },
   "scripts": {
