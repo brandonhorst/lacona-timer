@@ -64,7 +64,7 @@ async function startTimer (delay, type, message, stringTime) {
   const pidPath = getPIDPath()
   const out = fs.openSync('/tmp/out.log', 'a');
   const alertFile = join(__dirname, '../bin/alert.sh')
-  const notifierFile = join(__dirname, '../bin/MountainNotifier')
+  const notifierFile = join(__dirname, '../bin/terminal-notifier')
   const subtitle = type === 'timer' ? 'Timer' : 'Alarm'
   const content = message || (type === 'timer' ? 'The timer is done' : 'The alarm is going off')
   const proc = spawn(

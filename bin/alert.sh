@@ -7,6 +7,6 @@ Notifier="$6"
 
 /bin/sleep "$Delay"
 
-"$Notifier" io.lacona.Lacona "$Title" "$Subtitle" "$Message"
+"$Notifier" -sender io.lacona.Lacona -title "$Title" -subtitle "$Subtitle" -message "$Message" -sound default
 
 sed -i.bak '/"pid":'"$$"'/d' "$PIDFile"
